@@ -10,6 +10,8 @@ from subprocess import call
 prefix = 'https://stackoverflow.com/a/'
 
 remote = requests.get('http://samserver.bhargavrao.com:8000/napi/api/reports/all?filter=010000')
+remote.raise_for_status()
+
 data = js.loads(remote.text)
 links = [item['link'] for item in data['items']]
 
