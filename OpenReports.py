@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# This script will open all unhandled Natty reports in a new Firefox window
+
 import requests
 import json as js
 import rfc3987
@@ -19,6 +21,6 @@ if len(links) == 1:
 elif len(links) > 1:
     call(['firefox'] + links)
 else:
-    print('All reports have been tended too.')
+    print('All reports have been tended to.')
 
 
