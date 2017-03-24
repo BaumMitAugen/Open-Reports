@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
-from urllib.request import urlretrieve
+import requests
 import json as js
 from subprocess import call
 
-remote = urlretrieve('http://samserver.bhargavrao.com:8000/napi/api/reports/all?filter=010000')
-tempFile = open(remote[0])
-data = js.load(tempFile)
+remote = requests.get('http://samserver.bhargavrao.com:8000/napi/api/reports/all?filter=010000')
+data = js.loads(remote.text)
 links = [item['link'] for item in data['items']]
 
 if len(links) == 1:
