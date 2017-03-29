@@ -52,8 +52,7 @@ except:
     last = []
 
 if args.ignore_rest:
-    newIgnored = [v for v in ignored if v in curr]
-    newIgnored += [v for v in last if v in curr and not v in ignored]
+    newIgnored = [v for v in last if v in curr]
     f = open(filename, 'w')
     f.write(' '.join(newIgnored))
     f.write('\n')
