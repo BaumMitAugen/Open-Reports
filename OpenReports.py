@@ -35,7 +35,8 @@ def openLinks(links):
         print('All reports have been tended to.')
 
 parser = ArgumentParser(description = 'Interface to Natty reports')
-parser.add_argument('-ir', '--ignore-rest', action='store_true')
+parser.add_argument('-ir', '--ignore-rest', action='store_true',
+                help='Ignore all unhandled reports from the last run in the future')
 args = parser.parse_args()
 
 curr, links = getLinks()
