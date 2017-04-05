@@ -5,8 +5,11 @@
 import requests
 import json as js
 import rfc3987
+import webbrowser
 from argparse import ArgumentParser
-from subprocess import call
+
+apiUrl = 'http://reports.socvr.org/api/create-report'
+filename = '.report_data.txt'
 
 def getLinks():
     prefix = 'https://stackoverflow.com/a/'
@@ -26,13 +29,22 @@ def getLinks():
 
     return ids, links
 
-def openLinks(links):
-    if len(links) == 1:
-        call(['firefox', '-new-window'] + links)
-    elif len(links) > 1:
-        call(['firefox'] + links)
-    else:
+def buildReport(reports):
+    ret = {'botName' : 'OpenReportsScript'}
+    posts = []
+    for i,l in reports:
+        posts.append([{'id':'title', 'name':i, 'value':l, 'specialType':'link'}])
+    ret['posts'] = posts
+    return ret
+
+def openLinks(reports):
+    if len(reports) == 0:
         print('All reports have been tended to.')
+        return
+    report = buildReport(reports)
+    r = requests.post(apiUrl, json=report)
+    r.raise_for_status()
+    webbrowser.open(r.text)
 
 parser = ArgumentParser(description = 'Interface to Natty reports')
 parser.add_argument('-ir', '--ignore-rest', action='store_true',
@@ -40,8 +52,6 @@ parser.add_argument('-ir', '--ignore-rest', action='store_true',
 args = parser.parse_args()
 
 curr, links = getLinks()
-
-filename = '.report_data.txt'
 
 try:
     dataFile = open(filename)
@@ -64,7 +74,7 @@ else:
     f.write(' '.join(ignored))
     f.write('\n')
     f.write(' '.join(curr))
-    good = [l for i, l in zip(curr, links) if not i in ignored]
+    good = [(i,l) for i, l in zip(curr, links) if not i in ignored]
     numIgnored = len(curr) - len(good)
     if numIgnored:
         print('Skipped %s ignored reports.'%numIgnored)
