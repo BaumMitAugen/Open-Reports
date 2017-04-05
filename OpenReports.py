@@ -4,7 +4,6 @@
 
 import requests
 import json as js
-import rfc3987
 import webbrowser
 from argparse import ArgumentParser
 
