@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# This script will open all unhandled Natty reports in a new Firefox window
+# Creates a socvr report with all unhandled Natty reports and maintains an ignore list
 
 import requests
 import json as js
