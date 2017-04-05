@@ -41,7 +41,7 @@ def openLinks(reports):
 
 parser = ArgumentParser(description = 'Interface to Natty reports')
 parser.add_argument('-ir', '--ignore-rest', action='store_true',
-                help='Ignore all unhandled reports from the last run in the future')
+                help='Add all unhandled reports from the last batch to your ignore list')
 args = parser.parse_args()
 
 reports = getData()
