@@ -23,8 +23,10 @@ def buildReport(reports):
     ret = {'botName' : 'OpenReportsScript'}
     posts = []
     for v in reports:
+        reasons = ', '.join(r['reasonName'] for r in v['reasons'])
         posts.append([{'id':'title', 'name':v['name'], 'value':v['link'], 'specialType':'link'},
-            {'id':'score', 'name':'NAA Score', 'value':v['naaValue']}])
+            {'id':'score', 'name':'NAA Score', 'value':v['naaValue']},
+            {'id':'reasons', 'name':'Reasons', 'value':reasons}])
     ret['posts'] = posts
     return ret
 
