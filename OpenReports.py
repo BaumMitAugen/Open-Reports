@@ -11,8 +11,6 @@ apiUrl = 'http://reports.socvr.org/api/create-report'
 filename = '.report_data.txt'
 
 def getData():
-    prefix = 'https://stackoverflow.com/a/'
-
     remote = requests.get('http://samserver.bhargavrao.com:8000/napi/api/reports/all')
     remote.raise_for_status()
 
