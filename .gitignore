@@ -1,4 +1,5 @@
 *.swp
 *.pyc
 .report_data.txt
+*.ignorelist
 

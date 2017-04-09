@@ -8,7 +8,6 @@ import webbrowser
 from argparse import ArgumentParser
 
 apiUrl = 'http://reports.socvr.org/api/create-report'
-filename = '.report_data.txt'
 
 def _getData():
     remote = requests.get('http://samserver.bhargavrao.com:8000/napi/api/reports/all')
@@ -28,16 +27,25 @@ def _buildReport(reports):
     ret['posts'] = posts
     return ret
 
-def _openLinks(reports):
+def OpenLinks(reports, local = False):
     if len(reports) == 0:
-        print('All reports have been tended to.')
-        return
+        if local:
+            print('All reports have been tended to.')
+        return None
     report = _buildReport(reports)
     r = requests.post(apiUrl, json=report)
     r.raise_for_status()
-    webbrowser.open(r.text)
+    if local:
+        webbrowser.open(r.text)
+        return None
+    else:
+        return r.text
 
-def OpenReports(mode='normal'):
+def OpenReports(mode='normal', local=False, userID=None):
+    if userID:
+        filename = str(userID) + '.ignorelist'
+    else:
+        filename = '.report_data.txt'
     reports = _getData()
     curr = [v['name'] for v in reports]
 
@@ -56,7 +64,11 @@ def OpenReports(mode='normal'):
         f.write(' '.join(newIgnored))
         f.write('\n')
         f.write(' '.join(last))
-        print(str(len(newIgnored)) + ' reports in ignore list.')
+        msg = str(len(newIgnored)) + ' reports in ignore list.'
+        if local:
+            print(msg)
+        else:
+            return msg
     else:
         f = open(filename, 'w')
         f.write(' '.join(ignored))
@@ -65,13 +77,28 @@ def OpenReports(mode='normal'):
         good = [v for v in reports if not v['name'] in ignored]
         numIgnored = len(curr) - len(good)
         if mode == 'fetch_amount':
-            print ('There ' + ('is ' if len(curr) == 1 else 'are ') + str(len(curr))
-                + ' unhandled ' + ('report' if len(curr) == 1 else 'reports') + ', %s of which '%numIgnored 
-                + ('is' if numIgnored == 1 else 'are') + ' on your ignore list.')
+            msg = 'There ' + ('is ' if len(curr) == 1 else 'are ') + str(len(curr)) \
+                    + ' unhandled ' + ('report' if len(curr) == 1 else 'reports') \
+                    + ', %s of which '%numIgnored \
+                    + ('is' if numIgnored == 1 else 'are') + ' on your ignore list.'
+            if local:
+                print (msg)
+            else:
+                return msg
         else:
+            msg = ''
             if numIgnored:
-                print('Skipped %s ignored reports.'%numIgnored)
-            _openLinks(good)
+                if local:
+                    print('Skipped %s ignored reports.'%numIgnored)
+                else:
+                    msg = 'Skipped %s ignored reports. '%numIgnored
+            report = OpenLinks(good, local)
+            if not local:
+                if not good:
+                    msg += 'All reports have been tended to.'
+                else:
+                    msg += 'Opened %s [reports](%s).'%(len(good), report)
+            return msg
 
 if __name__ == '__main__':
     parser = ArgumentParser(description = 'Interface to Natty reports')
@@ -87,4 +114,4 @@ if __name__ == '__main__':
     if args.fetch_amount:
         mode = 'fetch_amount'
 
-    OpenReports(mode)
+    OpenReports(mode, True)
