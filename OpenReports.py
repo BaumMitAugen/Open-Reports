@@ -40,6 +40,8 @@ def openLinks(reports):
 parser = ArgumentParser(description = 'Interface to Natty reports')
 parser.add_argument('-ir', '--ignore-rest', action='store_true',
                 help='Add all unhandled reports from the last batch to your ignore list')
+parser.add_argument('-fa', '--fetch-amount', action='store_true',
+                help='Only show the number of reports')
 args = parser.parse_args()
 
 reports = getData()
@@ -68,7 +70,12 @@ else:
     f.write(' '.join(curr))
     good = [v for v in reports if not v['name'] in ignored]
     numIgnored = len(curr) - len(good)
-    if numIgnored:
-        print('Skipped %s ignored reports.'%numIgnored)
-    openLinks(good)
+    if args.fetch_amount:
+        print ('There ' + ('is ' if len(curr) == 1 else 'are ') + str(len(curr))
+            + ' unhandled ' + ('report' if len(curr) == 1 else 'reports') + ', %s of which '%numIgnored 
+            + ('is' if numIgnored == 1 else 'are') + ' on your ignore list.')
+    else:
+        if numIgnored:
+            print('Skipped %s ignored reports.'%numIgnored)
+        openLinks(good)
 
