@@ -97,7 +97,7 @@ def OpenReports(mode='normal', local=False, userID=None):
                 if not good:
                     msg += 'All reports have been tended to.'
                 else:
-                    msg += 'Opened %s [reports](%s).'%(len(good), report)
+                    msg += 'Opened %s [report%s](%s).'%(len(good),'' if len(good) == 1 else 's', report)
             return msg
 
 if __name__ == '__main__':
