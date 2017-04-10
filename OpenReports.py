@@ -33,7 +33,8 @@ def OpenLinks(reports, local = False):
             print('All reports have been tended to.')
         return None
     report = _buildReport(reports)
-    r = requests.post(apiUrl, json=report)
+    
+    r = requests.post(apiUrl, data=js.dumps(report))
     r.raise_for_status()
     if local:
         webbrowser.open(r.text)
