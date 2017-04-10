@@ -49,10 +49,10 @@ print('Logged in')
 room = client.get_room(roomID)
 room.join()
 print('Joined room')
-room.watch(onMessage)
 
-while True:
-    p = input()
+watcher = room.watch(onMessage)
+watcher.thread.join()
+
 
 client.logout()
 
