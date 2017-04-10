@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import getpass
 import logging
@@ -18,15 +19,18 @@ commands = {'o':'normal', 'open':'normal', 'ir':'ignore_rest', 'ignore rest':'ig
 
 def _parseMessage(msg):
     temp = msg.split()
-    return ' '.join(v for v in temp if not v[0] == '@')
+    return ' '.join(v for v in temp if not v[0] == '@').lower()
 
 def onMessage(message, client):
+    if isinstance(message, chatexchange.events.MessagePosted) and message.content == '🚂':
+        message.room.send_message('🚃')
+        return
     try:
         if message.target_user_id != selfID:
             return
         userID = message.user.id
         command = _parseMessage(message.content)
-        if command == 'alive':
+        if command == ['a', 'alive']:
             message.message.reply('Yes.')
         mode = commands[command]
     except:
