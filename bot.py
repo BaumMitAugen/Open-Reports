@@ -46,7 +46,7 @@ else:
 if 'ChatExchangeP' in os.environ:
     password = os.environ['ChatExchangeP']
 else:
-    password = getpass.getpass("Password: ")
+    password = input("Password: ")
 
 client = chatexchange.client.Client(hostID)
 client.login(email, password)
