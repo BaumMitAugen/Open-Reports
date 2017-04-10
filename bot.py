@@ -26,6 +26,8 @@ def onMessage(message, client):
             return
         userID = message.user.id
         command = _parseMessage(message.content)
+        if command == 'alive':
+            message.message.reply('Yes.')
         mode = commands[command]
     except:
         return
@@ -49,6 +51,7 @@ print('Logged in')
 room = client.get_room(roomID)
 room.join()
 print('Joined room')
+room.send_message('Hi o/')
 
 watcher = room.watch(onMessage)
 watcher.thread.join()
