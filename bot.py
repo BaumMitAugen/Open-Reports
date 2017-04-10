@@ -30,7 +30,7 @@ def onMessage(message, client):
             return
         userID = message.user.id
         command = _parseMessage(message.content)
-        if command == ['a', 'alive']:
+        if command in ['a', 'alive']:
             message.message.reply('Yes.')
         mode = commands[command]
     except:
