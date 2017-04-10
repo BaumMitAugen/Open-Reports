@@ -70,10 +70,6 @@ def OpenReports(mode='normal', local=False, userID=None):
         else:
             return msg
     else:
-        f = open(filename, 'w')
-        f.write(' '.join(ignored))
-        f.write('\n')
-        f.write(' '.join(curr))
         good = [v for v in reports if not v['name'] in ignored]
         numIgnored = len(curr) - len(good)
         if mode == 'fetch_amount':
@@ -86,6 +82,10 @@ def OpenReports(mode='normal', local=False, userID=None):
             else:
                 return msg
         else:
+            f = open(filename, 'w')
+            f.write(' '.join(ignored))
+            f.write('\n')
+            f.write(' '.join(curr))
             msg = ''
             if numIgnored:
                 if local:
