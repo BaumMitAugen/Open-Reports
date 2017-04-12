@@ -9,6 +9,9 @@ from argparse import ArgumentParser
 
 apiUrl = 'http://reports.socvr.org/api/create-report'
 
+def _pluralize(word, amount):
+    return word if amount == 1 else word + 's'
+
 def _getData():
     remote = requests.get('http://samserver.bhargavrao.com:8000/napi/api/reports/all')
     remote.raise_for_status()
@@ -65,7 +68,7 @@ def OpenReports(mode='normal', local=False, userID=None):
         f.write(' '.join(newIgnored))
         f.write('\n')
         f.write(' '.join(last))
-        msg = str(len(newIgnored)) + ' reports in ignore list.'
+        msg = str(len(newIgnored)) + ' %s in ignore list.'%_pluralize('report', len(newIgnored))
         if local:
             print(msg)
         else:
