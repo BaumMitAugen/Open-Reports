@@ -43,7 +43,7 @@ def onMessage(message, client):
     except:
         return
     
-    message.message.reply(OpenReports.OpenReports(mode, userID=userID, amount=None)) 
+    message.message.reply(OpenReports.OpenReports(mode, userID=userID, amount=amount))
 
 
 if 'ChatExchangeU' in os.environ:
