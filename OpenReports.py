@@ -45,7 +45,7 @@ def OpenLinks(reports, local = False):
     else:
         return r.text
 
-def OpenReports(mode='normal', local=False, userID=None):
+def OpenReports(mode='normal', local=False, userID=None, amount=None):
     if userID:
         filename = str(userID) + '.ignorelist'
     else:
@@ -91,6 +91,7 @@ def OpenReports(mode='normal', local=False, userID=None):
             f.write('\n')
             f.write(' '.join(curr))
             msg = ''
+            good = good[:amount]
             if numIgnored:
                 if local:
                     print('Skipped %s ignored reports.'%numIgnored)

@@ -25,6 +25,8 @@ def onMessage(message, client):
     if isinstance(message, chatexchange.events.MessagePosted) and message.content == '🚂':
         message.room.send_message('🚃')
         return
+
+    amount = None
     try:
         if message.target_user_id != selfID:
             return
@@ -32,11 +34,16 @@ def onMessage(message, client):
         command = _parseMessage(message.content)
         if command in ['a', 'alive']:
             message.message.reply('Yes.')
-        mode = commands[command]
+            return
+        if command.isdigit():
+            mode = 'normal'
+            amount = int(command)
+        else:
+            mode = commands[command]
     except:
         return
     
-    message.message.reply(OpenReports.OpenReports(mode, userID=userID)) 
+    message.message.reply(OpenReports.OpenReports(mode, userID=userID, amount=None)) 
 
 
 if 'ChatExchangeU' in os.environ:
